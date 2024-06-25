@@ -22,8 +22,7 @@ function App() {
       });
   });
 
-
-  const handleSendMessage = () => {
+  const handleSend2friend = () => {
     if (!liff.isLoggedIn()) {
       liff.login();
     } else {
@@ -55,6 +54,24 @@ function App() {
     }
   };
 
+
+  const handleSendMessage = () => {
+    if (!liff.isLoggedIn()) {
+      liff.login();
+    } else {
+      liff.sendMessages([
+        {
+          type: 'text',
+          text: 'Hi'
+        }
+      ]).then(() => {
+        alert('Message sent');
+      }).catch((err) => {
+        console.error('Error sending message:', err);
+      });
+    }
+  };
+
   return (
     <div className="App">
       <h1>create-liff-app</h1>
@@ -75,7 +92,10 @@ function App() {
       <div>
       <h1>Welcome to Line LIFF App</h1>
       {isLiffReady ? (
-        <button onClick={handleSendMessage}>Send Message 2FRND</button>
+        <>
+                <button onClick={handleSendMessage}>Send Message</button>
+        <button onClick={handleSend2friend}>Send Message to Friend</button>
+        </>
       ) : (
         <p>Loading...</p>
       )}
