@@ -27,16 +27,12 @@ function App() {
     if (!liff.isLoggedIn()) {
       liff.login();
     } else {
-      liff.sendMessages([
-        {
-          type: 'text',
-          text: 'Hi'
-        }
-      ]).then(() => {
-        alert('Message sent');
-      }).catch((err) => {
-        console.error('Error sending message:', err);
-      });
+      liff.shareTargetPicker(message)
+      .then(function(res) {
+        console.log(res)
+      }).catch(function(error) {
+        console.log(error);
+      })
     }
   };
 
