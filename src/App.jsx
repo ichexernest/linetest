@@ -27,12 +27,31 @@ function App() {
     if (!liff.isLoggedIn()) {
       liff.login();
     } else {
-      liff.shareTargetPicker(message)
-      .then(function(res) {
-        console.log(res)
-      }).catch(function(error) {
-        console.log(error);
+      liff
+      .shareTargetPicker(
+        [
+          {
+            type: "text",
+            text: "Hello, World!",
+          },
+        ],
+        {
+          isMultiple: true,
+        }
+      )
+      .then(function (res) {
+        if (res) {
+          // succeeded in sending a message through TargetPicker
+          console.log(`[${res.status}] Message sent!`);
+        } else {
+          // sending message canceled
+          console.log("TargetPicker was closed!");
+        }
       })
+      .catch(function (error) {
+        // something went wrong before sending a message
+        console.log("something wrong happen");
+      });
     }
   };
 
@@ -56,7 +75,7 @@ function App() {
       <div>
       <h1>Welcome to Line LIFF App</h1>
       {isLiffReady ? (
-        <button onClick={handleSendMessage}>Send Message to Friend</button>
+        <button onClick={handleSendMessage}>Send Message 2FRND</button>
       ) : (
         <p>Loading...</p>
       )}
