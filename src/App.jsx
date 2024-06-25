@@ -26,8 +26,8 @@ function App() {
     if (!liff.isLoggedIn()) {
       liff.login();
     } else {
-      liff
-      .shareTargetPicker(
+      if (liff.isApiAvailable('shareTargetPicker')) {
+      liff.shareTargetPicker(
         [
           {
             type: "text",
@@ -51,6 +51,7 @@ function App() {
         // something went wrong before sending a message
         console.log("something wrong happen");
       });
+    }
     }
   };
 
