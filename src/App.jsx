@@ -27,33 +27,35 @@ function App() {
       liff.login();
     } else {
       if (liff.isApiAvailable('shareTargetPicker')) {
-      liff.shareTargetPicker(
-        [
+        liff.shareTargetPicker(
+          [
+            {
+              type: "image",
+              originalContentUrl: "https://qph.cf2.quoracdn.net/main-qimg-8d32a33a298a62cac96aef0806c78b89-lq",
+              previewImageUrl: "https://qph.cf2.quoracdn.net/main-qimg-8d32a33a298a62cac96aef0806c78b89-lq",
+            },
+          ],
           {
-            type: "text",
-            text: "Hello, World!",
-          },
-        ],
-        {
-          isMultiple: true,
-        }
-      )
-      .then(function (res) {
-        if (res) {
-          // succeeded in sending a message through TargetPicker
-          console.log(`[${res.status}] Message sent!`);
-        } else {
-          // sending message canceled
-          console.log("TargetPicker was closed!");
-        }
-      })
-      .catch(function (error) {
-        // something went wrong before sending a message
-        console.log("something wrong happen");
-      });
-    }
+            isMultiple: true,
+          }
+        )
+        .then(function (res) {
+          if (res) {
+            // succeeded in sending a message through TargetPicker
+            console.log(`[${res.status}] Message sent!`);
+          } else {
+            // sending message canceled
+            console.log("TargetPicker was closed!");
+          }
+        })
+        .catch(function (error) {
+          // something went wrong before sending a message
+          console.log("something wrong happen");
+        });
+      }
     }
   };
+  
 
 
   const handleSendMessage = () => {
@@ -95,7 +97,7 @@ function App() {
       {isLiffReady ? (
         <>
                 <button onClick={handleSendMessage}>Send Message</button>
-        <button onClick={handleSend2friend}>Send Message to Friend</button>
+        <button onClick={handleSend2friend}>Send Message 2Friend</button>
         </>
       ) : (
         <p>Loading...</p>
