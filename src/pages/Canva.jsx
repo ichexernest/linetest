@@ -13,7 +13,6 @@ const Canva = ({ onImageSave }) => {
         const canvas = canvasRef.current;
         const dataURL = canvas.toDataURL('image/png');
         onImageSave(dataURL);
-        alert(`Image URL: ${dataURL}`);
     };
 
     const drawCanvas = (context) => {
@@ -62,6 +61,15 @@ const Share = () => {
             });
     }, []);
 
+    const handleUploadImage = async (base64Image) => {
+        try {
+            const url = await uploadImage(base64Image);
+            setImageUrl(url);
+        } catch (error) {
+            setError(`Image upload failed: ${error.message}`);
+        }
+    };
+
     const handleSend2friend = () => {
         if (!liff.isLoggedIn()) {
             liff.login();
@@ -81,15 +89,12 @@ const Share = () => {
                 )
                 .then(function (res) {
                     if (res) {
-                        // succeeded in sending a message through TargetPicker
                         console.log(`[${res.status}] Message sent!`);
                     } else {
-                        // sending message canceled
                         console.log("TargetPicker was closed!");
                     }
                 })
                 .catch(function (error) {
-                    // something went wrong before sending a message
                     console.log("something wrong happen");
                 });
             }
@@ -132,7 +137,8 @@ const Share = () => {
 
             <div>
                 <h1>Welcome to Line LIFF App</h1>
-                <Canva onImageSave={setImageUrl} />
+                <p>{imageUrl}</p>
+                <Canva onImageSave={handleUploadImage} />
                 {isLiffReady ? (
                     <>
                         <button onClick={handleSendMessage}>Send Message</button>
@@ -145,5 +151,30 @@ const Share = () => {
         </div>
     );
 };
+
+const uploadImage = async (base64Image) => {
+    const formData = new FormData();
+    formData.append('image', base64Image.split(',')[1]);  // 去除data:image/png;base64,前綴
+    formData.append('type', 'base64');
+    formData.append('title', 'Simple upload');
+    formData.append('description', 'This is a simple image upload in Imgur');
+
+    const response = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer 18aacec6155e973f807e9d85dd64ae7bb81343b5',
+        },
+        body: formData
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.data.error}`);
+    }
+
+    const data = await response.json();
+    return data.data.link;
+};
+
 
 export default Share;
