@@ -1,12 +1,27 @@
 import React, { useState, useRef, useEffect } from 'react';
 import liff from "@line/liff";
 
+
 const Canva = ({ onImageSave }) => {
     const canvasRef = useRef(null);
-    const [color, setColor] = useState('white');
+    const [image, setImage] = useState(null);
+    const [text, setText] = useState('');
+    const [inputText, setInputText] = useState('');
 
-    const handleColorChange = (newColor) => {
-        setColor(newColor);
+    const handleImageChange = (imageSrc) => {
+        const img = new Image();
+        img.src = imageSrc;
+        img.onload = () => {
+            setImage(img);
+        };
+    };
+
+    const handleTextChange = (event) => {
+        setInputText(event.target.value);
+    };
+
+    const handleTextSubmit = () => {
+        setText(inputText);
     };
 
     const handleSave = () => {
@@ -16,29 +31,65 @@ const Canva = ({ onImageSave }) => {
     };
 
     const drawCanvas = (context) => {
-        context.fillStyle = color;
-        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Clear the canvas
+        if (image) {
+            context.drawImage(image, 0, 0, context.canvas.width, context.canvas.height);
+        } else {
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+        }
+        if (text) {
+            context.fillStyle = 'black';
+            context.font = '30px Arial';
+            const textWidth = context.measureText(text).width;
+            context.fillText(text, (context.canvas.width - textWidth) / 2, context.canvas.height / 2);
+        }
     };
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         drawCanvas(context);
-    }, [color]);
+    }, [image, text]);
 
     return (
         <div>
             <h1>Canvas Drawing Area</h1>
             <canvas ref={canvasRef} width={500} height={500} style={{ border: '1px solid black' }} />
             <div>
-                <button onClick={() => handleColorChange('red')}>Red</button>
-                <button onClick={() => handleColorChange('green')}>Green</button>
-                <button onClick={() => handleColorChange('blue')}>Blue</button>
-                <button onClick={handleSave}>Save as Image</button>
+                <img
+                    src="/images/card1.png"
+                    alt="Card"
+                    onClick={() => handleImageChange('/images/card1.png')}
+                    style={{ cursor: 'pointer', width: '50px', height: '50px', marginRight: '10px' }}
+                />
+                                <img
+                    src="/images/card2.png"
+                    alt="Card"
+                    onClick={() => handleImageChange('/images/card2.png')}
+                    style={{ cursor: 'pointer', width: '50px', height: '50px', marginRight: '10px' }}
+                />
+                                <img
+                    src="/images/card3.png"
+                    alt="Card"
+                    onClick={() => handleImageChange('/images/card3.png')}
+                    style={{ cursor: 'pointer', width: '50px', height: '50px', marginRight: '10px' }}
+                />
             </div>
+            <div>
+                <input
+                    type="text"
+                    value={inputText}
+                    onChange={handleTextChange}
+                    placeholder="Enter text"
+                />
+                <button onClick={handleTextSubmit}>Add Text</button>
+            </div>
+            <button onClick={handleSave} >Save as Image</button>
         </div>
     );
 };
+
 
 const Share = () => {
     const [message, setMessage] = useState("");
@@ -141,7 +192,7 @@ const Share = () => {
                 <Canva onImageSave={handleUploadImage} />
                 {isLiffReady ? (
                     <>
-                        <button onClick={handleSendMessage}>Send Message</button>
+                        {/* <button onClick={handleSendMessage}>Send Message</button> */}
                         <button onClick={handleSend2friend} disabled={!imageUrl}>Send Image to Friend</button>
                     </>
                 ) : (
