@@ -53,6 +53,7 @@ const Share = () => {
               .then(function (res) {
                   if (res) {
                       console.log(`[${res.status}] Message sent!`);
+                      handleSendMessage()
                   } else {
                       console.log("TargetPicker was closed!");
                   }
@@ -71,7 +72,7 @@ const Share = () => {
           liff.sendMessages([
               {
                   type: 'text',
-                  text: 'Hi'
+                  text: '感謝您遊玩，折價券1000萬'
               }
           ]).then(() => {
               alert('Message sent');
@@ -106,7 +107,7 @@ const Share = () => {
   };
   
   return (
-      <div className="container flex-col w-screen justify-center items-center">
+      <div className="container flex-col w-screen justify-center items-center bg-[#f9d93a]">
           <h1 className='text-center text-4xl mt-5'>create-liff-app</h1>
           {/* <a
               href="https://developers.line.biz/ja/docs/liff/"

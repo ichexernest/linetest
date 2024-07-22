@@ -47,20 +47,22 @@ const Canva = ({ onImageSave }) => {
     };
 
     const handleSave = () => {
+        const transformer = transformerRef.current;
+        transformer.nodes([]);
         const stage = stageRef.current;
-        stage.toDataURL({
-            mimeType: 'image/png',
-            callback: (dataUrl) => {
-                onImageSave(dataUrl);
-            }
-        });
+        const dataUrl = stage.toDataURL();
+        onImageSave(dataUrl);
+        setTimeout(() => {
+            transformer.nodes([textRef.current]);
+            transformer.getLayer().batchDraw();
+        }, 0);
     };
 
     const [bgImage] = useImage(image);
 
     const handleStageMouseDown = (e) => {
         if (e.target === e.target.getStage()) {
-            transformerRef.current.nodes([]);
+            // 不要关闭控制框
         }
     };
 
@@ -78,6 +80,14 @@ const Canva = ({ onImageSave }) => {
         });
     };
 
+    useEffect(() => {
+        transformerRef.current.nodes([textRef.current]);
+        transformerRef.current.getLayer().batchDraw();
+    }, [text]);
+
+    useEffect(() => {
+        handleImageChange('/images/card1.png')
+    }, [text]);
     return (
         <div className="w-full p-4">
             <div className="flex justify-center m-3">
@@ -86,7 +96,7 @@ const Canva = ({ onImageSave }) => {
                     height={canvasSize.height}
                     ref={stageRef}
                     onMouseDown={handleStageMouseDown}
-                    className=""
+                    className="border border-black"
                 >
                     <Layer>
                         {bgImage && (
@@ -125,8 +135,7 @@ const Canva = ({ onImageSave }) => {
                             }}
                             rotateEnabled={false}
                             enabledAnchors={['top-left', 'top-right', 'bottom-left', 'bottom-right']}
-                            borderStroke="red"
-                            borderStrokeWidth={2}
+                            borderStrokeWidth={2} // 设置控制框线宽
                         />
                     </Layer>
                 </Stage>
