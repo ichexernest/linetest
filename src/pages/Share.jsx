@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import liff from "@line/liff";
 import Canva from './Canva';
-
+import Title from '/images/title.png';
 
 const Share = () => {
   const [message, setMessage] = useState("");
@@ -107,8 +107,10 @@ const Share = () => {
   };
   
   return (
-      <div className="container flex-col w-screen justify-center items-center bg-[#f9d93a]">
-          <h1 className='text-center text-4xl mt-5'>create-liff-app</h1>
+      <div className="container flex-col w-screen justify-center items-center">
+        <div className='w-screen flex justify-center items-center mt-5'>
+        <img src={Title} className='w-4/5'></img>
+        </div>
           {/* <a
               href="https://developers.line.biz/ja/docs/liff/"
               target="_blank"

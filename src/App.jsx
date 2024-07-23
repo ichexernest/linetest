@@ -25,7 +25,9 @@ import Canva from './pages/Canva';
 // ]);
 const App = () => {
   return (
-    <Share />
+    <>
+        <Share />
+    </>
   );
 };
 
