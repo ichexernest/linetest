@@ -50,7 +50,7 @@ const Canva = ({ onImageSave }) => {
         const transformer = transformerRef.current;
         transformer.nodes([]);
         const stage = stageRef.current;
-        const dataUrl = stage.toDataURL();
+        const dataUrl = stage.toDataURL({ pixelRatio: 3 }); // 將 pixelRatio 設為 3 或更高
         onImageSave(dataUrl);
         setTimeout(() => {
             transformer.nodes([textRef.current]);
