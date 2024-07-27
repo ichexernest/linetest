@@ -8,26 +8,29 @@ import {
 import Share from './pages/Share';
 import Welcome from './pages/Welcome';
 import Canva from './pages/Canva';
+import { ImgProvider } from './provider/imgProvider';
 
-// const router = createHashRouter([
-//   {
-//     path: "/",
-//     element: <Welcome />,
-//   },
-//   {
-//     path: "/share",
-//     element: <Share />,
-//   },
-//   {
-//     path: "/canva",
-//     element: <Canva />,
-//   },
-// ]);
+const router = createHashRouter([
+  {
+    path: "/",
+    element: <Welcome />,
+  },
+  {
+    path: "/share",
+    element: <Share />,
+  },
+  {
+    path: "/canva",
+    element: <Canva />,
+  },
+]);
 const App = () => {
   return (
-    <>
-        <Share />
-    </>
+    <ImgProvider>
+        <RouterProvider
+    router={router}/>
+    </ImgProvider>
+
   );
 };
 

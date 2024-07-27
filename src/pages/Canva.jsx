@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Text, Image as KonvaImage, Transformer } from 'react-konva';
 import useImage from 'use-image';
+import { useImg } from '../provider/imgProvider';
+import { useNavigate } from 'react-router-dom';
 
-const Canva = ({ onImageSave }) => {
+const Canva = () => {
+    const navigate = useNavigate()
+    const {dispatch}=useImg()
     const stageRef = useRef(null);
     const textRef = useRef(null);
     const transformerRef = useRef(null);
@@ -18,10 +22,37 @@ const Canva = ({ onImageSave }) => {
         setCanvasSize({ width: size, height: size });
     };
 
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const handleUploadImage = async (base64Image) => {
+        try {
+            const url = await uploadImage(base64Image);
+            return url
+        } catch (error) {
+            setError(`Image upload failed: ${error.message}`);
+        }
+    };
+    const uploadImage = async (base64Image) => {
+        const formData = new FormData();
+        formData.append('image', base64Image.split(',')[1]);  // 去除data:image/png;base64,前綴
+        formData.append('type', 'base64');
+        formData.append('title', 'Simple upload');
+        formData.append('description', 'This is a simple image upload in Imgur');
+      
+        const response = await fetch('https://api.imgur.com/3/image', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer 18aacec6155e973f807e9d85dd64ae7bb81343b5',
+            },
+            body: formData
+        });
+      
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.data.error}`);
+        }
+      
+        const data = await response.json();
+        return data.data.link;
+      };
 
     const handleImageChange = (imageSrc) => {
         setImage(imageSrc);
@@ -46,16 +77,22 @@ const Canva = ({ onImageSave }) => {
         setTextColor(event.target.value);
     };
 
-    const handleSave = () => {
+    const handleSave = async  () => {
         const transformer = transformerRef.current;
         transformer.nodes([]);
         const stage = stageRef.current;
         const dataUrl = stage.toDataURL({ pixelRatio: 3 }); // 將 pixelRatio 設為 3 或更高
-        onImageSave(dataUrl);
+        const url = await handleUploadImage(dataUrl);
+        const img = {
+            image: dataUrl,
+            url: url
+        }
+        dispatch({ type: 'save_img', payload: img })
         setTimeout(() => {
             transformer.nodes([textRef.current]);
             transformer.getLayer().batchDraw();
         }, 0);
+        navigate('/Share')
     };
 
     const [bgImage] = useImage(image);
@@ -65,6 +102,7 @@ const Canva = ({ onImageSave }) => {
             // 不要关闭控制框
         }
     };
+
 
     const handleTransform = (e) => {
         const node = textRef.current;
@@ -79,6 +117,11 @@ const Canva = ({ onImageSave }) => {
             fontSize: node.fontSize() * Math.max(scaleX, scaleY),
         });
     };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         transformerRef.current.nodes([textRef.current]);
