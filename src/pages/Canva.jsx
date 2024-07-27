@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Text, Image as KonvaImage, Transformer } from 'react-konva';
 import useImage from 'use-image';
 import { useImg } from '../provider/imgProvider';
-import { useNavigate } from 'react-router-dom';
+import { useRoute } from '../provider/routeProvider';
 
 const Canva = () => {
-    const navigate = useNavigate()
     const {dispatch}=useImg()
+    const {dispatch:dispatchRoute} = useRoute()
     const stageRef = useRef(null);
     const textRef = useRef(null);
     const transformerRef = useRef(null);
@@ -92,7 +92,7 @@ const Canva = () => {
             transformer.nodes([textRef.current]);
             transformer.getLayer().batchDraw();
         }, 0);
-        navigate('/Share')
+        dispatchRoute({ type: 'go_routing', payload: 3 })
     };
 
     const [bgImage] = useImage(image);
