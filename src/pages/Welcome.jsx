@@ -46,20 +46,20 @@ const Welcome = () => {
 
     return (
         <>
-      <div className='w-screen flex justify-center items-center mt-5'>
+      <div className='w-screen flex justify-center items-center mt-10'>
         <img src={Title} className='w-4/5' alt="Title" />
       </div>
       <div className='bg-white bg-opacity-40 border-blue-900 border-4 m-6 rounded-lg p-6'>
-      <p className='text-blue-900 font-bold text-lg'>每位爸爸都是家庭中的無名英雄，默默付出，守護著我們的幸福與健康。無論是清晨的咖啡，還是深夜的加班，他們總是在我們身邊，給予無限的支持和愛。</p>
+      <p className='text-blue-900 font-bold text-lg'>每位爸爸都是家庭中的無名英雄，默默付出，守護著我們的幸福與健康。他們總是在我們身邊，給予無限的支持和愛。</p>
 
-      <p className='text-blue-900 font-bold text-lg mt-3'>這個父親節，讓我們回饋這份愛。GoodMood 誠摯邀請您為爸爸設計專屬卡片，滿載感謝與愛意。分享卡片後，您還可獲得特別優惠券，享受更多優惠。</p>
+      <p className='text-blue-900 font-bold text-lg mt-3'>為您最愛的爸爸設計專屬卡片，送上最適合他的超能力，表達您的感謝與愛意。分享卡片後，您還可獲得特別優惠券。</p>
 
       <p className='text-blue-900 font-bold text-lg mt-3'>立即開始設計，為最愛的超級英雄送上滿滿的力量和愛吧！</p>
       </div>
-                <button className='p-5 text-2xl bg-[#FED501] text-blue-900 rounded-lg shadow-md font-extrabold border-4 border-blue-800' onClick={handleTurnPage}> 馬上開始 </button>
+                <button className='p-5 text-2xl bg-[#FED501] text-blue-900 rounded-xl shadow-md font-extrabold border-4 border-blue-800' onClick={handleTurnPage}> 開始製作！ </button>
             {/* <Link to={`/share`}> <button> share </button></Link> */}
             <div className='w-screen flex justify-center items-center mb-10'>
-        <img src={Logo} className='w-[200px]' alt="Logo" />
+        <img src={Logo} className='w-[200px] mt-10' alt="Logo" />
       </div>
         </>
     );
