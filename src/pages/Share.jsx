@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import liff from "@line/liff";
 import Title from '/images/title.png';
 import { useImg } from '../provider/imgProvider';
+import { useRoute } from '../provider/routeProvider';
 import Logo from '/images/logo.png';
 
 const Share = () => {
   const { Img } = useImg();
+  const { dispatch: dispatchRoute } = useRoute();
   const [message, setMessage] = useState("");
   const [isLiffReady, setIsLiffReady] = useState(false);
   const [error, setError] = useState("");
@@ -42,37 +44,17 @@ const Share = () => {
             isMultiple: true,
           }
         )
-          .then(function (res) {
+          .then((res) => {
             if (res) {
-             // console.log(`[${res.status}] Message sent!`);
-             // handleSendMessage();
-            
+              dispatchRoute({ type: 'go_routing', payload: 4 });
             } else {
               console.log("TargetPicker was closed!");
             }
           })
-          .catch(function (error) {
-            console.log("something wrong happened");
+          .catch((error) => {
+            console.log("Something wrong happened:", error);
           });
       }
-      dispatch({ type: 'go_routing', payload: 4 })
-    }
-  };
-
-  const handleSendMessage = () => {
-    if (!liff.isLoggedIn()) {
-      liff.login();
-    } else {
-      liff.sendMessages([
-        {
-          type: 'text',
-          text: '感謝您遊玩，折價券1000萬'
-        }
-      ]).then(() => {
-        alert('Message sent');
-      }).catch((err) => {
-        console.error('Error sending message:', err);
-      });
     }
   };
 
@@ -82,30 +64,29 @@ const Share = () => {
         <img src={Title} className='w-4/5' alt="Title" />
       </div>
       <div className='mt-10'>
-      <span className='text-xl text-blue-800 font-bold text-center'>恭喜您完成您的卡片！現在馬上發送給親愛的爸爸吧！</span>
-
+        <span className='text-xl text-blue-800 font-bold text-center'>恭喜您完成您的卡片！現在馬上發送給親愛的爸爸吧！</span>
       </div>
 
       <div className='w-screen flex justify-center items-center mt-5'>
         <img src={Img.currentImg.image} className='w-4/5' alt="Shared content" />
       </div>
       <div className='flex flex-col justify-center  items-center'>
-      <div>
-                <span className='text-sm text-red-600 font-bold text-center w-screen'>小提示：長壓圖片可以儲存到相簿喔！</span>
-            </div>
+        <div>
+          <span className='text-sm text-red-600 font-bold text-center w-screen'>小提示：長壓圖片可以儲存到相簿喔！</span>
+        </div>
         {isLiffReady ? (
-            <div className="mt-4">
-                        <button onClick={handleSend2friend} disabled={!Img.currentImg.url} className='p-5 text-2xl bg-[#FED501] text-blue-900 rounded-xl shadow-md font-extrabold border-4 border-blue-800 disabled:bg-blue-300'>
+          <div className="mt-4">
+            <button onClick={handleSend2friend} disabled={!Img.currentImg.url} className='p-5 text-2xl bg-[#FED501] text-blue-900 rounded-xl shadow-md font-extrabold border-4 border-blue-800 disabled:bg-blue-300'>
               發送卡片！
             </button>
-                  </div>
+          </div>
         ) : (
           <p>...</p>
         )}
 
-<div className='w-screen flex justify-center items-center mb-10'>
-        <img src={Logo} className='w-[200px] mt-10' alt="Logo" />
-      </div>
+        <div className='w-screen flex justify-center items-center mb-10'>
+          <img src={Logo} className='w-[200px] mt-10' alt="Logo" />
+        </div>
       </div>
       {/* {message && <p>{message}</p>} */}
       {error && (
@@ -113,9 +94,7 @@ const Share = () => {
           <code>{error}</code>
         </p>
       )}
-      
     </div>
-    
   );
 };
 
