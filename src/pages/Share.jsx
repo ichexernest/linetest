@@ -44,7 +44,6 @@ const Share = () => {
         )
           .then(function (res) {
             if (res) {
-              dispatch({ type: 'go_routing', payload: 4 })
              // console.log(`[${res.status}] Message sent!`);
              // handleSendMessage();
             
@@ -56,6 +55,7 @@ const Share = () => {
             console.log("something wrong happened");
           });
       }
+      dispatch({ type: 'go_routing', payload: 4 })
     }
   };
 
